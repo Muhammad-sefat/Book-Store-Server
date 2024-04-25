@@ -1,6 +1,7 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
+require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -8,8 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri =
-  "mongodb+srv://Book_Store:X0rPMGu5I77GN4uy@cluster0.dbn21dt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.dbn21dt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -22,9 +22,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-
     const bookCollection = client.db("bookDB").collection("book");
 
     app.get("/book", async (req, res) => {
@@ -78,5 +75,5 @@ app.get("/", (req, res) => {
   res.send("Server Is runing with Full speed");
 });
 app.listen(port, () => {
-  console.log("Listen port from 5000");
+  console.log(`Listen port from ${port}`);
 });
